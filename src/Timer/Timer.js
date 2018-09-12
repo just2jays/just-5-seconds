@@ -19,23 +19,36 @@ class Timer extends Component {
     this.stop = this.stop.bind(this);
     this.reset = this.reset.bind(this);
     this.updateTimer = this.updateTimer.bind(this);
+    this.toggleTimer = this.toggleTimer.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.gameStatus !== prevProps.gameStatus) {
-      switch(this.props.gameStatus) {
-        case 'active':
-          this.start();
-          break;
-        case 'complete':
-          this.stop();
-          break;
-        case 'ready':
-          this.reset();
-          break;
-        default:
-          return;
+  componentDidMount() {
+    // Allow gameplay via keyboard
+    window.addEventListener('keydown', (event) => {
+      if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
       }
+      if(event.keyCode === 32){
+        this.toggleTimer();
+      }
+      // Cancel the default action to avoid it being handled twice
+      event.preventDefault();
+    });
+  }
+
+  toggleTimer() {
+    switch(this.props.gameStatus) {
+      case 'ready':
+        this.start();
+        break;
+      case 'active':
+        this.stop();
+        break;
+      case 'complete':
+        this.reset();
+        break;
+      default:
+        return;
     }
   }
 
@@ -56,6 +69,9 @@ class Timer extends Component {
     this.setState( {
       isRunning: true
     });
+
+    // callback to alert of game started
+    this.props.onTimerStart();
   }
 
   // Stop the timer
@@ -76,15 +92,41 @@ class Timer extends Component {
       currentTime: this.startingTime
     });
     clearInterval(window.timerInterval);
+
+    // callback to setup new game
+    this.props.onTimerReset(this.state);
   }
 
   render() {
+    const { gameStatus } = this.props;
+
     let time = this.state.currentTime;
+    let buttonText;
+
+    switch(gameStatus) {
+      case 'complete':
+        buttonText = 'RESET'
+        break;
+      case 'active':
+        buttonText = 'STOP'
+        break;
+      default:
+        buttonText = 'START'
+        break;
+    }
+
     return(
       <div ref={this.timerContainer}>
-        <div class="box">
+        <div className="box has-text-centered">
           <div className={css.timer}>{time}</div>
+          <progress className="progress is-primary" value={this.state.currentTime} max="500">15%</progress>
         </div>
+        <a
+          className="button is-large is-fullwidth is-info is-rounded"
+          onClick={this.toggleTimer}
+        >
+          {buttonText}
+        </a>
       </div>
     );
   }
