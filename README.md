@@ -1,3 +1,6 @@
+## Demo
+https://just-5-seconds.glitch.me/
+
 ## What is this?
 This is a simple game I've been building to develop my [React](https://reactjs.org/) skills, learn more about the [Bulma](https://bulma.io) style framework, and build a functioning [Progressive Web App](https://developers.google.com/web/progressive-web-apps/).
 
