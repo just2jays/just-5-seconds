@@ -3,13 +3,13 @@ import logo from './logo.svg';
 import Header from './Header/Header';
 import Timer from './Timer/Timer';
 import Results from './Results/Results';
-import './App.css';
+import css from './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      gameStatus: 'neutral', // possible options: active, complete, neutral
+      gameStatus: 'ready', // possible options: ready, active, complete
       lastResults: {}
     }
 
@@ -17,44 +17,103 @@ class App extends Component {
     this.handleGameResults = this.handleGameResults.bind(this);
   }
 
+  componentDidMount() {
+    // Allow gameplay via touch devices
+    window.addEventListener('touchstart', function() {
+      // the user touched the screen
+      switch(this.state.gameStatus) {
+        case 'ready':
+          this.setState({
+            gameStatus: 'active'
+          });
+          break;
+        case 'active':
+          this.setState({
+            gameStatus: 'complete'
+          });
+          break;
+        case 'complete':
+          this.setState({
+            gameStatus: 'ready',
+            lastResults: {}
+          });
+          break;
+        default:
+          return;
+      }
+    });
+
+    // Allow gameplay via keyboard
+    window.addEventListener('keydown', (event) => {
+      if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+      }
+
+      if(event.keyCode === 32){
+        switch(this.state.gameStatus) {
+          case 'ready':
+            this.setState({
+              gameStatus: 'active'
+            });
+            break;
+          case 'active':
+            this.setState({
+              gameStatus: 'complete'
+            });
+            break;
+          case 'complete':
+            this.setState({
+              gameStatus: 'ready',
+              lastResults: {}
+            });
+            break;
+          default:
+            return;
+        }
+      }
+      // Cancel the default action to avoid it being handled twice
+      event.preventDefault();
+    });
+  }
+
   handleGameResults(results) {
     this.setState({
       gameStatus: 'complete',
       lastResults: results
     });
-    
-    // if(count == 0){
-    //   $('.resultMessage').html('You nailed it!!! On the nose!!! WOW!!!');
-    // }else if(count < 0) {
-    //   $('.resultMessage').html('You were late by '+ Math.abs(Number(Number(count)/placeValues)) +' seconds');
-    // }else{
-    //   $('.resultMessage').html('You were early by '+ Number(Number(count)/placeValues) +' seconds');
-    // }
-
-    // // handle color display
-    // if(Math.abs(count/placeValues) <= 0.09) {
-    //   $('body').css('background-color', 'green');
-    // }else if(Math.abs(count/placeValues) <= 0.3) {
-    //   $('body').css('background-color', 'yellow');
-    // }else if(Math.abs(count/placeValues) <= 0.7) {
-    //   $('body').css('background-color', 'orange');
-    // }else{
-    //   $('body').css('background-color', 'red');
-    // }
-
-    // $('#results').show();
   }
 
   render() {
+    let color = {backgroundColor: 'initial'};
+
+    console.log(this.state.lastResults);
+    if(this.state.lastResults.currentTime === undefined){
+      color = {backgroundColor: 'initial'};
+    }else if(this.state.lastResults.currentTime <= 9) {
+      color = {backgroundColor: 'green'};
+    }else if(this.state.lastResults.currentTime <= 30) {
+      color = {backgroundColor: 'yellow'};
+    }else if(this.state.lastResults.currentTime <= 70) {
+      color = {backgroundColor: 'orange'};
+    }else{
+      color = {backgroundColor: 'red'};
+    }
+
     return (
-      <div className="appContainer">
+      <div className={`appContainer`} style={color}>
         <Header />
-        <section className="results--section">
+        <section className="hero">
+          <div className="hero-body">
+            <div className="container has-text-centered">
+              <Timer
+                onTimerEnd={this.handleGameResults}
+                {...this.state}
+              />
+            </div>
+          </div>
+        </section>
+        <section className="results">
           <div className="container">
-            <Timer
-              onTimerEnd={this.handleGameResults}
-              {...this.state}
-            />
             <Results
               data={this.state.lastResults}
             />

@@ -9,8 +9,6 @@ class Timer extends Component {
       isRunning: false
     }
 
-    this.decimalPrecision = 3;
-    this.dividerTime = 100;
     this.startingTime = 500;
 
     // Refs
@@ -21,53 +19,24 @@ class Timer extends Component {
     this.stop = this.stop.bind(this);
     this.reset = this.reset.bind(this);
     this.updateTimer = this.updateTimer.bind(this);
-
   }
 
-  componentDidMount() {
-    window.addEventListener('touchstart', function() {
-      // the user touched the screen
-      // if(this.state.isGameOver) {
-      //   this.reset();
-      //   return;
-      // }
-
-      // if(this.state.isRunning){
-      //   this.stop();
-      // }else{
-      //   this.start();
-      // }
+  componentDidUpdate(prevProps) {
+    if (this.props.gameStatus !== prevProps.gameStatus) {
       switch(this.props.gameStatus) {
-        case 'neutral':
-          return;
         case 'active':
-          return;
-        case 'complete':
-          return;
-      }
-    });
-
-    window.addEventListener('keydown', (event) => {
-      if (event.defaultPrevented) {
-        return; // Do nothing if the event was already processed
-      }
-
-      if(event.keyCode == 32){
-        // the user has pressed `space` key
-        if(this.state.isGameOver) {
-          this.reset();
-          return;
-        }
-  
-        if(this.state.isRunning){
-          this.stop();
-        }else{
           this.start();
-        }
+          break;
+        case 'complete':
+          this.stop();
+          break;
+        case 'ready':
+          this.reset();
+          break;
+        default:
+          return;
       }
-      // Cancel the default action to avoid it being handled twice
-      event.preventDefault();
-    });
+    }
   }
 
   updateTimer() {
@@ -81,6 +50,7 @@ class Timer extends Component {
     });
   }
 
+  // Start the timer
   start() {
     window.timerInterval = setInterval(this.updateTimer, 10);
     this.setState( {
@@ -88,6 +58,7 @@ class Timer extends Component {
     });
   }
 
+  // Stop the timer
   stop() {
     this.setState( {
       isRunning: false
@@ -98,6 +69,7 @@ class Timer extends Component {
     this.props.onTimerEnd(this.state);
   }
 
+  // Reset the timer to initial state
   reset() {
     this.setState( {
       isRunning: false,
@@ -107,10 +79,12 @@ class Timer extends Component {
   }
 
   render() {
-    let time = this.state.currentTime / this.dividerTime;
+    let time = this.state.currentTime;
     return(
       <div ref={this.timerContainer}>
-        <div class="timer">{time.toPrecision(this.decimalPrecision)}</div>
+        <div class="box">
+          <div className={css.timer}>{time}</div>
+        </div>
       </div>
     );
   }
