@@ -52,7 +52,7 @@ class Game extends Component {
     
     return (
       <section className={`section`} style={color}>
-        <div className="columns is-mobile">
+        <div className="columns">
           <div className="column is-three-fifths is-offset-one-fifth">
             <Timer
               onTimerStart={this.handleGameStart}

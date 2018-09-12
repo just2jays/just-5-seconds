@@ -6,6 +6,4 @@ Light: #E7EFF3
 Contast: #FF8F56
 */
 
-.appContainer {
-  height: 100vh;
-}
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');

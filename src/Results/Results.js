@@ -1,49 +1,38 @@
 import React, { Component } from 'react';
-import isEmpty from 'lodash/isEmpty';
+import last from 'lodash/last';
 import css from './Results.css';
 
 class Results extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      previousScores: []
-    }
-
-    this.previousScores = [];
+    this.state = {}
 
     // Refs
     this.resultsContainer = React.createRef();
   }
 
-  // componentDidUpdate() {
-  //   console.log('----- '+this.props.gameStatus+' ---------');
-  //   console.log('   >>>>> ',this.props.lastResults);
-  //   if (this.props.gameStatus === 'complete') {
-  //     // this.previousScores.push(this.props.lastResults);
-  //     this.setState({
-  //       previousScores: [...this.state.previousScores, this.props.lastResults]
-  //     })
-  //   }
-  // }
-
   render() {
-    console.log(this.props);
-    // const { lastResults } = this.props;
-    // let message = '';
+    let lastResult = last(this.props.scores);
+    let message = '';
     
-    // if( lastResults.currentTime === undefined ) return null;
+    if( lastResult === undefined || this.props.gameStatus !== 'complete' ) return null;
 
-    // if(lastResults.currentTime == 0){
-    //   message = 'On the 👃!! Great job!';
-    // }else if(lastResults.currentTime < 0) {
-    //   message = 'You were late by '+Math.abs(Number(lastResults.currentTime/100))+' seconds';
-    // }else{
-    //   message = 'You were early by '+Number(lastResults.currentTime/100)+' seconds';
-    // }
+    if(lastResult.currentTime === 0){
+      message = 'On the 👃!! Great job!';
+    }else if(lastResult.currentTime < 0) {
+      message = 'You were late by '+Math.abs(Number(lastResult.currentTime/100))+' seconds';
+    }else{
+      message = 'You were early by '+Number(lastResult.currentTime/100)+' seconds';
+    }
 
     return(
-      <div ref={this.resultsContainer}>
-        <table className="table">
+      <section className={`section`} ref={this.resultsContainer}>
+      <div className="level">
+        <p className="level-item has-text-centered">
+          <span className={`${css.message} link is-info`}>{message}</span>
+        </p>
+      </div>
+        <table className={`table is-fullwidth`}>
           <thead>
             <tr>
               <th>Attempt</th>
@@ -62,11 +51,7 @@ class Results extends Component {
             }
           </tbody>
         </table>
-      </div>
-      // <div ref={this.resultsContainer}>
-      //   <p class="title is-4 is-spaced">{message}</p>
-      //   <p class="subtitle is-6">(Click or Tap to try again!)</p>
-      // </div>
+      </section>
     );
   }
 }

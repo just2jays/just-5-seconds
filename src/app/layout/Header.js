@@ -1,5 +1,6 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import css from './Header.css';
 
 class Header extends React.Component {
   state = {
@@ -19,15 +20,12 @@ class Header extends React.Component {
           style={{
             borderBottom: 'solid 1px #dddddd',
           }}>
-        <div className="navbar-brand">
+        <div className={`${css.branding} navbar-brand`}>
           <NavLink
             className="navbar-item"
             to="/"
-            activeClassName="is-active"
+            // activeClassName="is-active"
           >
-            <img
-              src="https://media-exp2.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAU3AAAAJGE1MzYxNzYzLTE1NTUtNDEyYi04MzRjLTgzZjNkOGU0MGIzNg.jpg"
-              width="30px" alt="" />
             <span>Just 5</span>
           </NavLink>
           {/* <button className="button navbar-burger" onClick={this.toggleNav}>
