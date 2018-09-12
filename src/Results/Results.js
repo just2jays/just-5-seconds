@@ -27,7 +27,8 @@ class Results extends Component {
 
     return(
       <div ref={this.resultsContainer}>
-        {message}
+        <p class="title is-4 is-spaced">{message}</p>
+        <p class="subtitle is-6">(Click or Tap to try again!)</p>
       </div>
     );
   }

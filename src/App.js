@@ -41,7 +41,7 @@ class App extends Component {
         default:
           return;
       }
-    });
+    }.bind(this));
 
     // Allow gameplay via keyboard
     window.addEventListener('keydown', (event) => {
@@ -90,17 +90,15 @@ class App extends Component {
     if(this.state.lastResults.currentTime === undefined){
       color = {backgroundColor: 'initial'};
     }else if(this.state.lastResults.currentTime <= 9) {
-      color = {backgroundColor: 'green'};
-    }else if(this.state.lastResults.currentTime <= 30) {
-      color = {backgroundColor: 'yellow'};
-    }else if(this.state.lastResults.currentTime <= 70) {
-      color = {backgroundColor: 'orange'};
+      color = {backgroundColor: '#6ab04c'};
+    }else if(this.state.lastResults.currentTime <= 50) {
+      color = {backgroundColor: '#f9ca24'};
     }else{
-      color = {backgroundColor: 'red'};
+      color = {backgroundColor: '#eb4d4b'};
     }
 
     return (
-      <div className={`appContainer`} style={color}>
+      <div className={css.appContainer} style={color}>
         <Header />
         <section className="hero">
           <div className="hero-body">
@@ -113,7 +111,7 @@ class App extends Component {
           </div>
         </section>
         <section className="results">
-          <div className="container">
+          <div className="container has-text-centered">
             <Results
               data={this.state.lastResults}
             />

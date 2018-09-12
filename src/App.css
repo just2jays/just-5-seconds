@@ -5,3 +5,7 @@ Dark: #8EA6B4
 Light: #E7EFF3
 Contast: #FF8F56
 */
+
+.appContainer {
+  height: 100vh;
+}
