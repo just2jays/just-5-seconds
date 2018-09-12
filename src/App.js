@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import Header from './Header/Header';
 import Timer from './Timer/Timer';
-import Results from './Timer/Timer';
+import Results from './Results/Results';
 import './App.css';
 
 class App extends Component {
@@ -19,7 +20,7 @@ class App extends Component {
   handleGameResults(results) {
     this.setState({
       gameStatus: 'complete',
-      results: results
+      lastResults: results
     });
     
     // if(count == 0){
@@ -46,30 +47,16 @@ class App extends Component {
 
   render() {
     return (
-      <div className="">
-        <div className="topheader">
-          <header className="container">
-          <nav class="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-              <a class="navbar-item" href="https://bulma.io">
-                <img src="https://bulma.io/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28" />
-              </a>
-              <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-              </a>
-            </div>
-          </nav>
-          </header>
-        </div>
+      <div className="appContainer">
+        <Header />
         <section className="results--section">
           <div className="container">
             <Timer
               onTimerEnd={this.handleGameResults}
+              {...this.state}
             />
             <Results
-
+              data={this.state.lastResults}
             />
           </div>
         </section>

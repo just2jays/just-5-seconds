@@ -27,15 +27,23 @@ class Timer extends Component {
   componentDidMount() {
     window.addEventListener('touchstart', function() {
       // the user touched the screen
-      if(this.state.isGameOver) {
-        this.reset();
-        return;
-      }
+      // if(this.state.isGameOver) {
+      //   this.reset();
+      //   return;
+      // }
 
-      if(this.state.isRunning){
-        this.stop();
-      }else{
-        this.start();
+      // if(this.state.isRunning){
+      //   this.stop();
+      // }else{
+      //   this.start();
+      // }
+      switch(this.props.gameStatus) {
+        case 'neutral':
+          return;
+        case 'active':
+          return;
+        case 'complete':
+          return;
       }
     });
 
